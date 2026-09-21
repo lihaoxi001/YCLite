@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d2ff"/>
+      <stop offset="100%" stop-color="#3a7bd5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer rings -->
+  <circle cx="50" cy="50" r="47" fill="none" stroke="#00d2ff" stroke-width="0.5" opacity="0.2"/>
+  <circle cx="50" cy="50" r="44" fill="url(#bg)" stroke="url(#glow)" stroke-width="2"/>
+
+  <!-- Accent dots -->
+  <circle cx="26" cy="26" r="1.5" fill="#00d2ff" opacity="0.4"/>
+  <circle cx="74" cy="74" r="1.5" fill="#3a7bd5" opacity="0.4"/>
+
+  <!-- "L" - vertical + bottom horizontal -->
+  <rect x="16" y="25" width="6" height="44" rx="3" fill="url(#glow)"/>
+  <rect x="16" y="63" width="20" height="6" rx="3" fill="url(#glow)"/>
+
+  <!-- "H" - two verticals + middle crossbar -->
+  <rect x="40" y="25" width="6" height="44" rx="3" fill="url(#glow)"/>
+  <rect x="60" y="25" width="6" height="44" rx="3" fill="url(#glow)"/>
+  <rect x="40" y="43" width="26" height="6" rx="3" fill="url(#glow)"/>
+
+  <!-- "X" - two crossing diagonals -->
+  <line x1="72" y1="25" x2="86" y2="69" stroke="url(#glow)" stroke-width="5" stroke-linecap="round"/>
+  <line x1="86" y1="25" x2="72" y2="69" stroke="url(#glow)" stroke-width="5" stroke-linecap="round"/>
+</svg>

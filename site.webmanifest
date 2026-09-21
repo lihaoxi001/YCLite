@@ -1,0 +1,13 @@
+{
+  "name": "lhx的博客",
+  "short_name": "lhx",
+  "description": "生命不息，折腾不止",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "icons": [
+    { "src": "/usr/themes/FCLite/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/usr/themes/FCLite/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,70 @@
+<?php
+if (!defined('__TYPECHO_ROOT_DIR__')) exit;
+$GLOBALS['page'] = 'archive';
+
+// 语言初始化
+languageInit();
+
+$this->need('components/header.php');
+?>
+
+<main class="wrap" id="main">
+    <div class="grid">
+        <div class="post-list">
+            <?php if ($this->options->breadcrumb == 'on'): ?>
+                <nav aria-label="<?php echo $GLOBALS['t']['breadcrumb']; ?>" class="crumbs">
+                    <ol>
+                        <li>
+                            <a href="<?php $this->options->siteUrl(); ?>"><?php echo $GLOBALS['t']['header']['home']; ?></a>
+                        </li>
+                        <li tabindex="0" aria-current="page"><?php $this->archiveTitle(' &raquo; ','',''); ?></li>
+                    </ol>
+                </nav>
+            <?php endif; ?>
+            <header class="archive-head">
+                <h1>
+                    <?php $this->archiveTitle(array(
+                        'category' => $GLOBALS['t']['archive']['postsUnderTheCategory'],
+                        'search' => $GLOBALS['t']['archive']['postsContainingTheKeyword'],
+                        'tag' => $GLOBALS['t']['archive']['postsTagged'],
+                        'author' => $GLOBALS['t']['archive']['postsByAuthor']
+                    ), '', ''); ?>
+                </h1>
+                <?php if ($this->getDescription() != ''): ?>
+                    <span class="archive-description"><?php echo $this->getDescription(); ?></span>
+                <?php endif; ?>
+            </header>
+            <?php if ($this->have()): ?>
+                <?php $this->need('components/post-list.php'); ?>
+                <?php if ($this->options->postPaginationType == 'loadMore'): ?>
+                    <nav hidden aria-label="<?php echo $GLOBALS['t']['pagination']['pagination']; ?>">
+                        <?php $nextPageExists = paginate($this, $GLOBALS['t']['pagination']['previousPage'], $GLOBALS['t']['pagination']['nextPage']); ?>
+                    </nav>
+                    <?php if ($nextPageExists): ?>
+                        <div class="text-center mt-4">
+                            <button type="button" class="btn btn-primary load-more-btn"><?php echo $GLOBALS['t']['loadMore']['loadMore']; ?></button>
+                        </div>
+                    <?php endif; ?>
+                <?php else: ?>
+                <nav aria-label="<?php echo $GLOBALS['t']['pagination']['pagination']; ?>">
+                    <?php paginate($this, $GLOBALS['t']['pagination']['previousPage'], $GLOBALS['t']['pagination']['nextPage']); ?>
+                </nav>
+                <?php endif; ?>
+            <?php else: ?>
+                <article class="no-content">
+                    <hr>
+                    <h4 class="mb-3" role="alert"><?php printf($GLOBALS['t']['archive']['noPostsFoundContaining'], '<b>' . $this->archiveTitle . '</b>') ?></h4 >
+                    <p><?php echo $GLOBALS['t']['archive']['youCanTryTheFollowing']; ?></p>
+                    <ol class="pl-3 mb-5">
+                        <li><?php echo $GLOBALS['t']['archive']['trySearchingWithDifferentKeywords']; ?></li>
+                        <li><?php echo $GLOBALS['t']['archive']['browsePostsByCategoryInTheSectionToTheRightOrBelow']; ?></li>
+                        <li><?php echo $GLOBALS['t']['archive']['browsePostsByTagsInTheTagCloudSectionToTheRightOrBelow']; ?></li>
+                    </ol>
+                </article>
+            <?php endif; ?>
+        </div>
+        <?php $this->need('components/sidebar.php'); ?>
+    </div>
+</main>
+
+<?php $this->need('components/footer.php'); ?>

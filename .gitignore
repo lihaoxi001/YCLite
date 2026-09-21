@@ -1,0 +1,11 @@
+cache/
+backup_*/
+*.bak*
+assets/css.bak.*
+components/*.bak.*
+
+
+# Backup files
+*.bak
+*.bak.*
+node_modules/
