@@ -28,6 +28,18 @@
 
 实现手段：单文件 CSS（`@layer` 分层）+ ESM 按需 `import()`（代码高亮、灯箱、Emoji 数据、二维码、公式、图表只在用到的页面加载）；图片原生 `loading="lazy"` + 首图 `fetchpriority`；静态资源 `?v=` 指纹 + SW 运行时缓存 + HTML 永不缓存；站内链接 speculationrules 预渲染（替代 PJAX，无刷新体验、评论零兼容问题）。
 
+<p align="center">
+  <img src="assets/screenshots/pagespeed-desktop.webp" alt="Pagespeed Desktop" width="700">
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/pagespeed-mobile.webp" alt="Pagespeed Mobile" width="700">
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/edgeone.webp" alt="腾讯 Edge One 测速" width="700">
+</p>
+
 ## 功能
 
 - 黑顶栏 + 粉线 + 网格纸纹 + 酸绿面包屑的 brutal 外壳，阅读区保持克制
