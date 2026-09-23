@@ -50,7 +50,7 @@ a{text-decoration:none}
 a:hover{color:var(--accent)}
 ::selection{background:var(--accent);color:#fff}
 :focus-visible{outline:3px solid var(--accent3);outline-offset:2px}
-.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .skip-link{position:absolute;left:8px;top:-48px;z-index:99;background:#111;color:#fff;padding:8px 14px;border:2px solid #000}
 .skip-link:focus{top:8px;color:#fff}
 .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:15px}
@@ -81,32 +81,38 @@ i[class^="icon-"],i[class*=" icon-"]{font-style:normal;display:inline-flex;align
 .topbar{position:sticky;top:0;z-index:50;background:#000;color:#fff;border-bottom:var(--bw) solid #000}
 .topbar::after{content:"";display:block;height:4px;background:var(--accent)}
 .topbar .theme-btn,.topbar .nav-toggle{box-shadow:4px 4px 0 var(--accent);color:#111}
+/* 黑顶栏内强制浅色边框+可见阴影：全局 --border-c/--sh 在浅色模式是黑色，贴黑底会隐形 */
+.topbar .theme-btn,.topbar .nav-toggle,.topbar .search-form button,.topbar .search-form input{border-color:#f2f2f2}
+.topbar .search-form button:hover{box-shadow:8px 8px 0 var(--accent)}
+/* 切换钮与搜索按钮等高：行高+padding 对齐（内容 27.2+12+边框=47.2px） */
+.topbar .theme-btn{padding:6px 10px;line-height:1.7}
 .topbar .theme-btn:hover,.topbar .nav-toggle:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--accent);background:var(--accent);color:#fff}
 .topbar .theme-btn:active,.topbar .nav-toggle:active{transform:translate(4px,4px);box-shadow:none}
 .topbar .nav-links a[aria-current="page"]{box-shadow:4px 4px 0 var(--accent)}
 .topbar .nav-drop-menu{box-shadow:4px 4px 0 var(--accent)}
-.topbar .search-form input{background:#fff;color:#111;border-color:#fff}
+.topbar .search-form input{background:transparent;color:#fff;border-color:#333}
+.topbar .search-form input::placeholder{color:#8a8a93}
 .navbar{display:flex;align-items:center;gap:var(--s3);padding:10px 0;flex-wrap:wrap}
 .brand{font-weight:900;font-size:1.3rem;letter-spacing:-.01em;margin-right:auto}
 .brand img{display:block}
 .nav-toggle{display:none;background:var(--surface);border:var(--bw) solid var(--border-c);box-shadow:var(--sh);padding:6px 12px;font-weight:900}
 .nav-links{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-.nav-links a,.nav-links summary{padding:6px 10px;font-weight:700;border:2px solid transparent}
-.nav-links a:hover,.nav-links summary:hover{background:var(--accent2);color:#111}
+.nav-links a,.nav-links summary{padding:6px 10px;font-weight:700;border:2px solid transparent;transition:transform .15s ease-out,box-shadow .15s ease-out,background-color .15s ease-out,color .15s ease-out}
+.nav-links a:hover,.nav-links summary:hover{background:var(--accent2);color:#111;transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--accent)}
 .nav-links a[aria-current="page"]{border-color:var(--border-c);background:var(--accent2);color:#111;box-shadow:var(--sh)}
 .nav-drop{position:relative}
 .nav-drop summary{cursor:pointer;list-style:none}
 .nav-drop summary::-webkit-details-marker{display:none}
 .nav-drop summary::after{content:" \25BE"}
 .nav-drop-menu{position:absolute;top:calc(100% + 6px);left:0;min-width:180px;background:var(--surface);border:var(--bw) solid var(--border-c);box-shadow:var(--sh);z-index:60}
-.nav-drop-menu a{display:block;padding:8px 12px}
-.nav-drop-menu a:hover{background:var(--accent2);color:#111}
+.nav-drop-menu a{display:block;padding:8px 12px;transition:transform .15s ease-out,box-shadow .15s ease-out,background-color .15s ease-out,color .15s ease-out}
+.nav-drop-menu a:hover{background:var(--accent2);color:#111;transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--accent)}
 .theme-btn{background:var(--accent2);color:#111;border:var(--bw) solid var(--border-c);box-shadow:var(--sh);padding:5px 10px;font-weight:900;line-height:1;transition:transform .15s ease-out,box-shadow .15s ease-out,background-color .15s ease-out}
 .theme-btn:hover{transform:translate(-2px,-2px);box-shadow:var(--sh-lg);background:var(--accent);color:#fff}
 .theme-btn:active{transform:translate(4px,4px);box-shadow:none}
 .search-form{display:flex}
 .search-form input{border:var(--bw) solid var(--border-c);border-right:0;background:var(--surface);padding:6px 10px;max-width:180px}
-.search-form button{background:var(--accent);color:#fff;border:var(--bw) solid var(--border-c);padding:6px 12px;font-weight:900;transition:transform .15s ease-out,box-shadow .15s ease-out,background-color .15s ease-out}
+.search-form button{background:var(--accent);color:#111;border:var(--bw) solid var(--border-c);padding:6px 12px;font-weight:900;transition:transform .15s ease-out,box-shadow .15s ease-out,background-color .15s ease-out}
 .search-form button:hover{background:#000;color:#fff;transform:translate(-2px,-2px);box-shadow:var(--sh-lg)}
 .search-form button:active{transform:translate(4px,4px);box-shadow:none}
 @media (max-width:991px){
@@ -125,7 +131,6 @@ i[class^="icon-"],i[class*=" icon-"]{font-style:normal;display:inline-flex;align
 @media (min-width:992px){.grid{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}}
 /* 页脚：纯黑带 */
 .footer{background:#000;color:#fff;border-top:var(--bw) solid #000;padding:var(--s4) 0;margin-top:var(--s5);text-align:center;font-size:.875rem}
-.footer .muted{color:#bbb}
 }
 
 @layer components {
@@ -204,7 +209,7 @@ i[class^="icon-"],i[class*=" icon-"]{font-style:normal;display:inline-flex;align
 .btn{display:inline-block;border:var(--bw) solid var(--border-c);background:var(--surface);padding:6px 14px;font-weight:900;box-shadow:var(--sh);transition:transform .15s ease-out,box-shadow .15s ease-out,background-color .15s ease-out,color .15s ease-out}
 .btn:hover{transform:translate(-2px,-2px);box-shadow:var(--sh-lg);background:var(--accent2);color:#111}
 .btn:active{transform:translate(4px,4px);box-shadow:none}
-.btn-primary{background:var(--accent);color:#fff}
+.btn-primary{background:var(--accent);color:#111}
 .btn-primary:hover{background:#000;color:#fff;transform:translate(-2px,-2px);box-shadow:var(--sh-lg)}
 .btn-primary:active{transform:translate(4px,4px);box-shadow:none}
 /* —— 互动按钮配色：休息态即多彩 —— */
@@ -249,7 +254,7 @@ html[data-theme="dark"] .pagination .active a{background:#f2f2f2;color:#111}
 .tagcloud .lv3{font-size:1.05rem;font-weight:700}
 .tagcloud .lv4{font-size:1.22rem;font-weight:900}
 .tagcloud .lv5{font-size:1.42rem;font-weight:900}
-.tagcloud .c1{color:var(--accent)}.tagcloud .c2{color:#0b7d9e}
+.tagcloud .c1{color:#d6005c}.tagcloud .c2{color:#0b7d9e}
 .tagcloud .c3{color:#8a5a00}.tagcloud .c4{color:#4d7c0f}
 .tagcloud .c5{color:var(--text)}
 html[data-theme="dark"] .tagcloud .c2{color:var(--accent3)}
@@ -258,7 +263,7 @@ html[data-theme="dark"] .tagcloud .c4{color:var(--accent2)}
 .sidebar h2{font-size:1.05rem;margin-bottom:var(--s3);display:inline-block;background:var(--accent2);color:#111;border:2px solid var(--border-c);padding:2px 10px;box-shadow:var(--sh)}
 html[data-theme="dark"] .sidebar h2{color:#111}
 /* 侧边栏标题四色轮换 */
-.sidebar section:nth-of-type(4n+1) h2{background:var(--accent);color:#fff}
+.sidebar section:nth-of-type(4n+1) h2{background:var(--accent);color:#111}
 .sidebar section:nth-of-type(4n+3) h2{background:var(--accent3);color:#111}
 .sidebar section:nth-of-type(4n) h2{background:var(--accent4);color:#111}
 .sidebar ul{padding-left:1.1em}
@@ -315,8 +320,8 @@ html[data-theme="dark"] .archives-item h2{background:#f2f2f2;color:#111}
 .emoji-cats button.selected{background:#111;color:#fff}
 html[data-theme="dark"] .emoji-cats button.selected{background:#f2f2f2;color:#111}
 .emoji-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));max-height:220px;overflow:auto;padding:8px}
-.emoji-list button{border:2px solid transparent;background:none;font-size:1.3rem;padding:6px;cursor:pointer}
-.emoji-list button:hover{background:var(--accent2);border-color:var(--border-c)}
+.emoji-list button{border:2px solid transparent;background:none;font-size:1.3rem;padding:6px;cursor:pointer;transition:transform .15s ease-out,box-shadow .15s ease-out,background-color .15s ease-out}
+.emoji-list button:hover{background:var(--accent2);border-color:var(--border-c);transform:translate(-2px,-2px);box-shadow:var(--sh-lg)}
 /* —— 代码块 —— */
 .post-content pre{position:relative;background:var(--code-bg);border:var(--bw) solid var(--border-c);padding:14px;overflow:auto;font-size:.85rem;line-height:1.6;margin-bottom:1em}
 .post-content pre code{background:none;border:0;padding:0}
@@ -378,6 +383,8 @@ dialog.toc-modal::backdrop{background:#000}
 @layer utilities {
 .mt-4{margin-top:var(--s4)}.mb-4{margin-bottom:var(--s4)}
 .text-center{text-align:center}.muted{color:var(--muted)}.mono{font-family:var(--font-mono)}
+/* 必须放在 .muted 之后：跨 @layer 时后声明的层必胜，写在 components 层会被覆盖 */
+.footer .muted{color:#bbb}
 .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 }
 

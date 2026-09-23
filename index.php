@@ -13,8 +13,6 @@ $GLOBALS['page'] = 'index';
 
 // 语言初始化
 languageInit();
-// 检查数据库字段
-checkField();
 $this->need('components/header.php');
 ?>
 

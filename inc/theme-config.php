@@ -4,6 +4,8 @@
 // 分组说明：每个分组前用 fclite-group 标记输出分组名，后台 JS 按标记自动分组，
 // 增删选项无需维护序号（旧的写死序号方案已废弃）。
 function themeConfig($form) {
+    // 后台保存/渲染设置时确保 views/agree 字段存在（服务端触发，无客户端）
+    ensureColumns();
     echo <<<EOT
     <p>您现在使用的是 YCLite（原生 CSS + JS，零依赖）</p>
     <button aria-describedby="export-description" id="export-btn" type="button" class="btn">导出主题配置文件</button>

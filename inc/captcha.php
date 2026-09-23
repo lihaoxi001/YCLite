@@ -38,7 +38,7 @@ function commentCaptchaEnabled() {
  * @return string 校验值
  */
 function commentCaptchaHash($answer, $time) {
-    $secret = trim(Helper::options()->commentCaptchaSecret);
+    $secret = trim(Helper::options()->commentCaptchaSecret ?? '');
 
     if ($secret == '') {
         $secret = '12345678';
@@ -111,11 +111,10 @@ function commentCaptchaImage() {
     $y = intval(($height - $textHeight) / 2);
     imagestring($image, $font, $x, $y, $text, $textColor);
 
-    // 把图片转换为 base64
+    // 把图片转换为 base64（PHP 8.0+ GdImage 析构自动释放，imagedestroy 自 8.5 起作废）
     ob_start();
     imagepng($image);
     $imageData = ob_get_clean();
-    imagedestroy($image);
 
     if ($imageData === false || $imageData == '') {
         commentCaptchaJsonError($GLOBALS['t']['comment']['captchaGenerateError']);

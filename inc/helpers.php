@@ -89,14 +89,16 @@ function agreeNum($cid) {
     $agree = $db->fetchRow($db->select('table.contents.agree')->from('table.contents')->where('cid = ?', $cid));
     $AgreeRecording = Typecho_Cookie::get('typechoAgreeRecording');
     if (empty($AgreeRecording)) {
-        Typecho_Cookie::set('typechoAgreeRecording', json_encode(array(0)));
+        // 点赞防刷 cookie 长效 180 天（阅读 cookie 保持会话级）；损坏的 cookie 按空处理
+        Typecho_Cookie::set('typechoAgreeRecording', json_encode(array(0)), 180 * 24 * 3600);
     }
 
+    $recorded = json_decode(Typecho_Cookie::get('typechoAgreeRecording') ?: '[]', true) ?: array();
     return array(
         // 点赞数量
         'agree' => $agree['agree'],
         // 文章是否点赞过
-        'recording' => in_array($cid, json_decode(Typecho_Cookie::get('typechoAgreeRecording')))?true:false
+        'recording' => in_array($cid, $recorded) ? true : false
     );
 }
 
@@ -111,16 +113,18 @@ function agree($cid) {
     $agree = $db->fetchRow($db->select('table.contents.agree')->from('table.contents')->where('cid = ?', $cid));
     $agreeRecording = Typecho_Cookie::get('typechoAgreeRecording');
     if (empty($agreeRecording)) {
-        Typecho_Cookie::set('typechoAgreeRecording', json_encode(array($cid)));
-    }else {
-        $agreeRecording = json_decode($agreeRecording);
+        Typecho_Cookie::set('typechoAgreeRecording', json_encode(array($cid)), 180 * 24 * 3600);
+    } else {
+        $agreeRecording = json_decode($agreeRecording, true) ?: array();
         // 判断文章是否点赞过
         if (in_array($cid, $agreeRecording)) {
             // 如果当前文章的 cid 在 cookie 中就返回文章的赞数，不再往下执行
             return $agree['agree'];
         }
         array_push($agreeRecording, $cid);
-        Typecho_Cookie::set('typechoAgreeRecording', json_encode($agreeRecording));
+        // 只保留最近 200 个，防止 cookie 无限增长
+        $agreeRecording = array_slice($agreeRecording, -200);
+        Typecho_Cookie::set('typechoAgreeRecording', json_encode($agreeRecording), 180 * 24 * 3600);
     }
 
     $db->query($db->update('table.contents')->rows(array('agree' => (int)$agree['agree'] + 1))->where('cid = ?', $cid));
@@ -318,15 +322,20 @@ function reply($parent) {
 }
 
 /**
- * 检查数据库字段（仅在首次激活主题时运行）
+ * 确保 views/agree 字段存在（服务端直调，无客户端、无标记）
+ *
+ * 在 themeInit（core 查库之前）和 themeConfig（后台保存）调用。
+ * 列已存在时两次 ALTER 瞬间失败被吞掉（SQLite 约 0.05ms，无日志），
+ * 列缺失时建上，并发下多个请求同时建列、失败的被吞掉、无竞态。
  *
  * @return void
  */
-function checkField() {
-    // 如果已经检查过字段则直接返回，避免每次页面加载都执行数据库查询
-    if (Typecho_Cookie::get('__typecho_theme_fclite_field_checked')) {
+function ensureColumns() {
+    static $done = false;
+    if ($done) {
         return;
     }
+    $done = true;
 
     $db = Typecho_Db::get();
     $prefix = $db->getPrefix();
@@ -362,13 +371,10 @@ function checkField() {
 
                 $db->query($sql);
             } catch (Typecho_Db_Exception $e) {
-                // 忽略错误
+                // 忽略错误（列已存在或并发建列冲突）
             }
         }
     }
-
-    // 标记字段已检查，后续请求不再执行
-    Typecho_Cookie::set('__typecho_theme_fclite_field_checked', '1');
 }
 
 /**
@@ -404,6 +410,8 @@ function postViews($archive) {
             // 阅读量 +1
             $db->query($db->update('table.contents')->rows(array('views' => $views + 1))->where('cid = ?', $cid));
             $cookieViews[] = $cid;
+            // 只保留最近 200 个（阅读 cookie 保持会话级，不延长有效期）
+            $cookieViews = array_slice($cookieViews, -200);
             $cookieViews = implode(',', $cookieViews);
             // 写入阅读 cookie
             Typecho_Cookie::set('extend_contents_views', $cookieViews);
@@ -708,9 +716,7 @@ function generateCropWebP($srcUrl, $width = 480, $quality = 75, $ratio = 3.0/2.0
 
     $result = imagewebp($thumbImg, $thumbPath, $quality);
 
-    imagedestroy($srcImg);
-    imagedestroy($thumbImg);
-
+    // PHP 8.0+ GdImage 析构自动释放，imagedestroy 自 8.5 起作废，不再调用
     return $result ? $thumbUrl : false;
 }
 
@@ -1160,7 +1166,7 @@ function isInternalLink($href, $siteUrl) {
  * @return void
  */
 function outputCustomHighlightCSS($input) {
-    $input = trim($input);
+    $input = trim($input ?? '');
     if (empty($input)) {
         return;
     }

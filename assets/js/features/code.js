@@ -31,12 +31,17 @@ export async function init() {
           await navigator.clipboard.writeText(code.innerText);
           done(true);
         } catch {
-          const ta = document.createElement('textarea');
-          ta.value = code.innerText;
-          document.body.appendChild(ta);
-          ta.select();
-          try { done(document.execCommand('copy')); } catch { done(false); }
-          ta.remove();
+          // Clipboard API 不可用（如非安全上下文）：execCommand 已废弃不再使用，
+          // 改为选中代码文本，提示访客手动复制
+          try {
+            const range = document.createRange();
+            range.selectNodeContents(code);
+            const sel = getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+          } catch { /* ignore */ }
+          btn.textContent = t.copyManual || '已选中，请手动复制';
+          setTimeout(() => { btn.textContent = t.copyCode || '复制'; }, 2000);
         }
       });
       pre.prepend(btn);

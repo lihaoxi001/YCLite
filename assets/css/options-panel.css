@@ -76,7 +76,7 @@
   width: 100%;
   border-collapse: collapse;
   font-family: 'Arial', sans-serif;
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 #link-editor-box table th {
   background-color: #447B99;

@@ -131,7 +131,7 @@ $page = $GLOBALS['page'] ?? '';
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       "headline": "<?php $this->title(); ?>",
-      "description": "<?php echo $this->fields->summaryContent ? htmlspecialchars($this->fields->summaryContent ?: $this->excerpt(200)) : htmlspecialchars($this->excerpt(200)); ?>",
+      "description": "<?php echo htmlspecialchars(($this->fields->summaryContent ?: $this->excerpt(200)) ?? '', ENT_QUOTES, 'UTF-8'); ?>",
       "author": {"@type": "Person", "name": "<?php $this->author(); ?>"},
       "publisher": {"@type": "Organization", "name": "<?php $this->options->title(); ?>"},
       "datePublished": "<?php echo date('c', $this->created); ?>",
@@ -144,7 +144,7 @@ $page = $GLOBALS['page'] ?? '';
       "@context": "https://schema.org",
       "@type": "Blog",
       "name": "<?php $this->options->title(); ?>",
-      "description": "<?php echo htmlspecialchars($this->options->description); ?>",
+      "description": "<?php echo htmlspecialchars($this->options->description ?? '', ENT_QUOTES, 'UTF-8'); ?>",
       "url": "<?php $this->options->siteUrl(); ?>"
     }
     </script>
@@ -157,8 +157,9 @@ $page = $GLOBALS['page'] ?? '';
         <nav class="navbar" aria-label="<?php echo $GLOBALS['t']['header']['navigationMenu']; ?>">
             <?php if ($this->options->navLogoUrl): ?>
                 <?php $navLogo = ($themeMode == 'dark' && $this->options->navDarkLogoUrl) ? $this->options->navDarkLogoUrl : $this->options->navLogoUrl; ?>
+                <?php $navLogoH = (int)($this->options->navLogoHeight ?: 30); if ($navLogoH <= 0) $navLogoH = 30; ?>
                 <a class="brand" href="<?php $this->options->siteUrl(); ?>" title="<?php $this->options->title(); ?>">
-                    <img id="nav-logo" src="<?php echo $navLogo; ?>" alt="<?php $this->options->title(); ?>" height="<?php $this->options->navLogoHeight(); ?>"<?php if ($this->options->navDarkLogoUrl): ?> data-logo-light="<?php $this->options->navLogoUrl(); ?>" data-logo-dark="<?php $this->options->navDarkLogoUrl(); ?>"<?php endif; ?>>
+                    <img id="nav-logo" src="<?php echo $navLogo; ?>" alt="<?php $this->options->title(); ?>" height="<?php echo $navLogoH; ?>" style="height:<?php echo $navLogoH; ?>px;width:auto"<?php if ($this->options->navDarkLogoUrl): ?> data-logo-light="<?php $this->options->navLogoUrl(); ?>" data-logo-dark="<?php $this->options->navDarkLogoUrl(); ?>"<?php endif; ?>>
                 </a>
             <?php else: ?>
                 <a class="brand" href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a>
