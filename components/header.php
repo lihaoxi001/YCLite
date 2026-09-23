@@ -43,7 +43,7 @@ $page = $GLOBALS['page'] ?? '';
 <html lang="<?php echo $GLOBALS['language']; ?>" data-theme="<?php echo $themeMode; ?>">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="<?php echo $themeMode; ?>">
     <meta name="theme-color" content="<?php echo $themeMode == 'dark' ? '#141417' : '#ffffff'; ?>">
     <link rel="dns-prefetch" href="https://www.gravatar.com">

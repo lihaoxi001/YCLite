@@ -42,6 +42,7 @@ for f in assets/js/main.js assets/js/lib/*.js assets/js/features/*.js assets/js/
 - 导航栏 Logo 图片必须带内联 `style="height:Npx;width:auto"`：全局 `img{height:auto}` 会覆盖 `height` 属性，无内在宽度的 SVG 会被压成 0×0；高度取 `navLogoHeight` 并 `intval` 兜底 30。
 - 交互 hover 统一全套 brutalist：`translate(-2px,-2px)` + 阴影放大 + `transition`（transform/box-shadow/background-color），顶栏恒黑底、内部按钮边框固定 `#f2f2f2`、阴影用 `var(--accent)`；纯文本链接只变色不动画。
 - 对比度红线 4.5：玫红 `#ff006e` 上只配黑字（4.96），不配白字；`c1` 用 `#d6005c`（深色模式 `#ff4d8d` 配深底可保留）；跨 `@layer` 时后声明的层必胜，同名覆盖必须写在 utilities 层 `.muted` 之后（如 `.footer .muted`）。
+- viewport 禁止 `maximum-scale/user-scalable=no`（无障碍审计直接挂）；输入框字号继承 16px，iOS 不会自动缩放，无需用禁缩来防。
   已删除的死选项：imagelazyloading、headerImageStyle、codeLineNum、pjax×3。
 - header 内联关键 CSS 必须包在 `@layer critical` 里——无层样式会无条件覆盖外部有层样式。
 - 公式分隔符：只认 `$$..$$`、`\[..\]`、`\(..\)`；裸 `$` 视为普通文本（美元价格），
